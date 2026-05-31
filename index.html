@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LIVELYSRAVAN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@100;400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --void:#030406;--deep:#07090f;--ink:#0c0e16;
+  --w0:rgba(255,255,255,0.9);--w1:rgba(255,255,255,0.55);
+  --w2:rgba(255,255,255,0.25);--w3:rgba(255,255,255,0.08);
+  --line:rgba(255,255,255,0.07);
+  --plasma:#00e0ec;--fire:#ff3c00;
+  --fd:'Orbitron',sans-serif;
+  --fb:'Syne',sans-serif;
+  --fm:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--void);color:var(--w1);font-family:var(--fb);cursor:none;overflow-x:hidden}
+
+/* cursor */
+#cur{position:fixed;width:7px;height:7px;background:#fff;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width .2s,height .2s}
+#cring{position:fixed;width:28px;height:28px;border:1px solid rgba(255,255,255,.18);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .1s ease}
+body.hov #cur{width:14px;height:14px}
+body.hov #cring{width:46px;height:46px;border-color:rgba(255,255,255,.35)}
+
+/* bg */
+#bgc{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+.wrap{position:relative;z-index:1}
+
+/* landing */
+#landing{height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.name-wrap{text-align:center;user-select:none;position:relative}
+.name-wrap{width:90vw;max-width:1100px}
+.name-row{display:block;font-family:var(--fd);font-weight:900;color:transparent;white-space:nowrap;width:100%;text-align:left}
+/* LIVELY has 6 chars, SRAVAN has 6 chars — same count, use letter-spacing to fine-tune width match */
+.row-lively{font-size:clamp(44px,12.5vw,180px);line-height:1;-webkit-text-stroke:1.5px rgba(0,224,236,.85);letter-spacing:.18em}
+.row-sravan{font-size:clamp(44px,12.5vw,180px);line-height:1;-webkit-text-stroke:1.5px rgba(220,40,0,.9);letter-spacing:.18em;margin-top:.08em}
+.ch{display:inline-block;transition:transform .22s cubic-bezier(.23,1,.32,1)}
+.scroll-h{position:absolute;bottom:-44px;left:50%;transform:translateX(-50%);font-family:var(--fm);font-size:8px;letter-spacing:6px;color:rgba(255,255,255,.16);white-space:nowrap;animation:blink 3s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:.16}50%{opacity:.45}}
+
+/* sections */
+section{padding:112px 64px;position:relative}
+.s-num{font-family:var(--fm);font-size:8px;letter-spacing:5px;color:var(--w2);margin-bottom:14px}
+.s-title{font-family:var(--fd);font-size:clamp(48px,9vw,136px);line-height:.88;color:var(--w0);margin-bottom:72px}
+
+/* timeline */
+#timeline{background:var(--deep);padding-left:0;padding-right:0;padding-bottom:48px}
+.t-head{padding:0 64px;margin-bottom:48px}
+.ttrack{display:flex;padding:0 64px 32px;overflow-x:auto;scrollbar-width:none;cursor:grab;gap:1px}
+.ttrack:active{cursor:grabbing}
+.ttrack::-webkit-scrollbar{display:none}
+.titem{flex-shrink:0;width:248px;border:1px solid var(--line);padding:26px;background:var(--void);transition:border-color .25s}
+.titem:hover{border-color:rgba(255,255,255,.15)}
+.tnum{font-family:var(--fm);font-size:7px;color:var(--w2);letter-spacing:3px;margin-bottom:18px}
+.tname{font-family:var(--fd);font-size:28px;color:var(--w0);line-height:1;margin-bottom:10px}
+.tdesc{font-family:var(--fm);font-size:9px;line-height:1.9;color:var(--w2)}
+.tdot{display:inline-block;width:4px;height:4px;border-radius:50%;margin-top:14px}
+.dw{background:rgba(255,255,255,.25)}.dr{background:var(--fire);opacity:.7}.dc{background:var(--plasma);opacity:.7}
+.drag-h{font-family:var(--fm);font-size:8px;letter-spacing:4px;color:var(--w2);text-align:center;margin-top:14px;text-transform:uppercase}
+
+/* lab */
+#laboratory{background:var(--void)}
+.lgrid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line)}
+.art{background:var(--void);padding:36px;min-height:300px;display:flex;flex-direction:column;justify-content:flex-end;cursor:none;position:relative;transition:background .3s;overflow:hidden}
+.art:hover{background:var(--deep)}
+.art-accent{position:absolute;top:0;left:0;width:2px;height:0;background:var(--plasma);transition:height .4s cubic-bezier(.23,1,.32,1)}
+.art:hover .art-accent{height:100%}
+.anum{position:absolute;top:26px;right:26px;font-family:var(--fm);font-size:7px;letter-spacing:3px;color:var(--w2)}
+.atype{font-family:var(--fm);font-size:7px;letter-spacing:4px;color:var(--w2);text-transform:uppercase;margin-bottom:8px}
+.atitle{font-family:var(--fd);font-size:clamp(18px,2.2vw,28px);font-weight:700;color:var(--w0);line-height:1.15;margin-bottom:14px;transition:color .2s;word-break:break-word}
+.afoot{font-family:var(--fm);font-size:8px;color:var(--w2);letter-spacing:2px;display:flex;gap:14px;transition:color .2s}
+.art:hover .afoot{color:rgba(255,255,255,.4)}
+
+/* modal */
+#modal{position:fixed;inset:0;background:rgba(3,4,6,.97);z-index:1000;display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity .28s;padding:40px;overflow-y:auto}
+#modal.open{opacity:1;pointer-events:all}
+.mbox{max-width:840px;width:100%;border:1px solid var(--line);padding:52px;background:var(--ink);position:relative}
+.mclose{position:absolute;top:22px;right:22px;background:none;border:none;font-family:var(--fm);font-size:13px;color:var(--w2);cursor:none;transition:color .2s}
+.mclose:hover{color:var(--w1)}
+.mtype{font-family:var(--fm);font-size:7px;letter-spacing:5px;color:var(--w2);text-transform:uppercase;margin-bottom:14px}
+.mtitle{font-family:var(--fd);font-size:clamp(40px,7vw,86px);line-height:.9;color:#fff;margin-bottom:44px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-bottom:36px}
+.ms h4{font-family:var(--fm);font-size:7px;letter-spacing:4px;color:var(--w2);text-transform:uppercase;margin-bottom:10px}
+.ms p{font-size:13px;line-height:1.9;color:var(--w1);font-family:var(--fb)}
+.srow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}
+.sitem{border-left:1px solid var(--line);padding-left:12px}
+.sv{font-family:var(--fd);font-size:30px;color:var(--w0)}
+.sl{font-family:var(--fm);font-size:7px;letter-spacing:2px;color:var(--w2);text-transform:uppercase;margin-top:2px}
+
+/* obsessions */
+#obsessions{background:var(--deep)}
+.ogrid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line)}
+.oblock{background:var(--deep);padding:44px;min-height:240px;transition:background .3s}
+.oblock:hover{background:var(--ink)}
+.ocat{font-family:var(--fm);font-size:7px;letter-spacing:5px;color:var(--w2);text-transform:uppercase;margin-bottom:24px}
+.oname{display:block;font-family:var(--fd);font-size:26px;color:rgba(255,255,255,.65);line-height:1.1;margin-bottom:3px;transition:color .2s}
+.oblock:hover .oname{color:var(--w0)}
+.osub{font-family:var(--fm);font-size:8px;color:var(--w2);margin-bottom:16px;line-height:1.6}
+
+/* future */
+#future{background:var(--void)}
+.frow{display:grid;grid-template-columns:52px 1fr 110px;gap:28px;align-items:center;padding:28px 0;border-bottom:1px solid var(--line);cursor:none;transition:border-color .2s}
+.frow:hover{border-color:rgba(255,255,255,.12)}
+.fi{font-family:var(--fm);font-size:8px;color:var(--w2);letter-spacing:2px}
+.fn{font-family:var(--fd);font-size:clamp(26px,3.2vw,50px);color:rgba(255,255,255,.55);transition:color .25s;line-height:1}
+.frow:hover .fn{color:var(--w0)}
+.ftag{font-family:var(--fm);font-size:7px;letter-spacing:3px;text-transform:uppercase;text-align:right;white-space:nowrap}
+.ta{color:var(--w2)}.tb{color:var(--plasma);opacity:.65}.tc{color:var(--fire);opacity:.65}
+
+/* footer */
+footer{padding:56px 64px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end}
+.flogo{font-family:var(--fd);font-size:36px;color:rgba(255,255,255,.07);letter-spacing:4px}
+.fmeta{font-family:var(--fm);font-size:8px;color:var(--w2);letter-spacing:2px;line-height:2.2;text-align:right}
+
+/* reveal */
+.rev{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease}
+.rev.in{opacity:1;transform:none}
+
+/* egg */
+#egg{position:fixed;bottom:22px;right:22px;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.07);cursor:none;z-index:100;transition:all .35s}
+#egg:hover{background:rgba(255,255,255,.3);width:8px;height:8px}
+#emsg{position:fixed;bottom:42px;right:22px;font-family:var(--fm);font-size:8px;color:var(--w2);background:var(--ink);border:1px solid var(--line);padding:9px 13px;max-width:190px;line-height:1.8;opacity:0;pointer-events:none;transition:opacity .2s;z-index:100}
+
+/* grain */
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:110px;opacity:.016;pointer-events:none;z-index:999}
+
+@media(max-width:768px){
+  section{padding:64px 20px}
+  #timeline{padding-left:0;padding-right:0}
+  .t-head{padding:0 20px}
+  .ttrack{padding:0 20px 20px}
+  .ogrid,.mgrid{grid-template-columns:1fr}
+  .frow{grid-template-columns:36px 1fr;gap:16px}
+  .ftag{display:none}
+  footer{flex-direction:column;gap:14px;padding:40px 20px}
+  .fmeta{text-align:left}
+  .mbox{padding:28px 20px}
+  .name-row{font-size:clamp(48px,18vw,200px) !important}
+}
+@media(max-width:480px){
+  .s-title{font-size:clamp(40px,11vw,136px)}
+  .lgrid{grid-template-columns:1fr}
+  .row-lively,.row-sravan{font-size:clamp(32px,12vw,180px) !important;letter-spacing:.1em !important}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cring"></div>
+<canvas id="bgc"></canvas>
+
+<div id="egg"></div>
+<div id="emsg">you found this.<br>not many do.</div>
+
+<div id="modal">
+  <div class="mbox">
+    <button class="mclose" onclick="closeModal()">&#x2715;</button>
+    <div class="mtype" id="mtype"></div>
+    <div class="mtitle" id="mtitle"></div>
+    <div class="mgrid">
+      <div class="ms"><h4>What it was</h4><p id="mstory"></p></div>
+      <div class="ms"><h4>What I took from it</h4><p id="mlearn"></p><div class="srow" id="mstats"></div></div>
+    </div>
+    <div class="ms"><h4>The honest version</h4><p id="mimpact"></p></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<section id="landing">
+  <div class="name-wrap">
+    <span class="name-row row-lively" id="nel-lively"></span>
+    <span class="name-row row-sravan" id="nel-sravan"></span>
+    <div class="scroll-h">scroll</div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="t-head rev"><div class="s-num">001</div><div class="s-title" style="margin-bottom:0">WHAT<br>HAPPENED</div></div>
+  <div class="ttrack rev" id="ttrack" style="transition-delay:.12s;margin-top:48px"></div>
+  <div class="drag-h">&#x2190; drag</div>
+</section>
+
+<section id="laboratory">
+  <div class="rev"><div class="s-num">002</div><div class="s-title">THINGS<br>I MADE</div></div>
+  <div class="lgrid rev" id="lgrid" style="transition-delay:.12s"></div>
+</section>
+
+<section id="obsessions">
+  <div class="rev"><div class="s-num">003</div><div class="s-title">RIGHT<br>NOW</div></div>
+  <div class="ogrid rev" id="ogrid" style="transition-delay:.12s"></div>
+</section>
+
+<section id="future">
+  <div class="rev"><div class="s-num">004</div><div class="s-title">WHAT<br>I WANT</div></div>
+  <div class="rev" id="flist" style="transition-delay:.12s"></div>
+</section>
+
+<footer>
+  <div class="flogo">LS</div>
+  <div class="fmeta">LIVELYSRAVAN<br>KERALA &rarr; EVERYWHERE<br>STILL FIGURING IT OUT</div>
+</footer>
+
+</div>
+
+<script>
+const tl=[
+  {n:'00',t:'FIRST LINE',d:"Wrote code at 2am. Didn't fully understand it. Kept going.",dot:'w'},
+  {n:'01',t:'FIRST CLIENT',d:"Someone paid actual money. Strange feeling. Wanted more of it.",dot:'c'},
+  {n:'02',t:'FIRST FAILURE',d:"Spent months on something nobody used. The most useful thing that happened to me.",dot:'r'},
+  {n:'03',t:'LEARNED DESIGN',d:"Realised I'd been making things that worked but looked wrong. Fixed that.",dot:'w'},
+  {n:'04',t:'WENT VIRAL',d:"One post blew up overnight. Didn't know what to do with it. Learned fast.",dot:'c'},
+  {n:'05',t:'SHIPPED FAST',d:"Built and launched in 72 hours out of impatience. It worked. Now it's a habit.",dot:'w'},
+  {n:'06',t:'BURNED OUT',d:"Ran three things at once for six months. Not recommended.",dot:'r'},
+  {n:'07',t:'NEW CITY',d:"Moved. New context, new people, new problems. Needed it.",dot:'w'},
+  {n:'08',t:'CRACKED DISTRIBUTION',d:"Building without an audience is shouting alone. Took too long to learn this.",dot:'c'},
+  {n:'09',t:'STILL GOING',d:"That's the whole thing, really.",dot:'w'},
+];
+
+const projects=[
+  {n:'001',t:'HYPERLOOP',type:'SAAS',story:"A dashboard for indie creators to manage their digital presence. Built quietly, grew through word of mouth, never ran an ad.",learn:"The tool was fine. Distribution was the actual problem. Learned this the slow way.",impact:"Around 200 people used it regularly. Some still do. Made enough to keep building.",stats:[{v:'200+',l:'Users'},{v:'$0',l:'Spent on ads'},{v:'6mo',l:'To build'},{v:'WOM',l:'How it grew'}]},
+  {n:'002',t:'SIGNAL DROP',type:'FAILED',story:"A niche social platform. Good design, thoughtful product, zero retention. Nobody came back after day one.",learn:"I validated nothing. Just assumed people wanted it. Four months of work to learn a lesson I could have learned in a week.",impact:"0 active users. The most educational project I've done.",stats:[{v:'0',l:'Retained users'},{v:'4mo',l:'Wasted'},{v:'1',l:'Real lesson'},{v:'never again',l:'Validation'}]},
+  {n:'003',t:'MARKETING OS',type:'PRODUCT',story:"Packaged years of hard-won marketing knowledge into a system small businesses could actually use without hiring an agency.",learn:"Knowledge is a product. I'd been giving this away free in conversations. Stopped doing that.",impact:"30+ businesses use it. Created once. Still generating revenue.",stats:[{v:'30+',l:'Businesses'},{v:'1x',l:'Time to build'},{v:'ongoing',l:'Revenue'},{v:'12h',l:'To create'}]},
+  {n:'004',t:'COLD NEON',type:'BRAND',story:"Built a brand around aesthetic alone. No product, no pitch. Just consistent energy and a point of view.",learn:"People follow feeling before they follow function. Most efficient audience I ever built.",impact:"8K people showed up purely for the vibe. Zero paid promotion.",stats:[{v:'8K',l:'Followers'},{v:'$0',l:'Budget'},{v:'2M+',l:'Reach'},{v:'1',l:'Vibe'}]},
+  {n:'005',t:'GROWTHLAB',type:'CONSULTING',story:"Turned my growth frameworks into 1:1 work with founders. Did this for 12 people over three months.",learn:"Working closely with other people's problems is the fastest way to understand your own thinking.",impact:"Average 40% revenue growth over 90 days. Stopped taking clients to build products instead.",stats:[{v:'12',l:'Founders'},{v:'40%',l:'Avg growth'},{v:'90d',l:'Sprints'},{v:'0',l:'Clients now'}]},
+  {n:'006',t:'THIS SITE',type:'ONGOING',story:"Started as a portfolio. Became a way of thinking about what I've actually done vs what I thought I did.",learn:"Writing about your work forces honesty. It's uncomfortable. Useful.",impact:"You're looking at it.",stats:[{v:'1',l:'You, right now'},{v:'4+',l:'Years of material'},{v:'honest',l:'Tone'},{v:'ongoing',l:'Status'}]},
+];
+
+const obs=[
+  {cat:'BUILDING',items:[{n:'LIVELYSRAVAN OS',s:'a personal system. still half-broken.'},{n:'ONE PRODUCT / MONTH',s:'an experiment in shipping speed.'}]},
+  {cat:'LEARNING',items:[{n:'SYSTEMS THINKING',s:'patterns that show up everywhere.'},{n:'BEHAVIORAL DESIGN',s:'why people do what they do.'}]},
+  {cat:'READING',items:[{n:'THE SOVEREIGN INDIVIDUAL',s:'written in 1997. somehow about now.'},{n:'THINKING IN BETS',s:'decisions under uncertainty.'}]},
+  {cat:'EXPERIMENTING',items:[{n:'AI-NATIVE WORKFLOWS',s:'replacing the boring parts.'},{n:'AUDIENCE ALCHEMY',s:'0 to 10K with no budget.'}]},
+];
+
+const fut=[
+  {t:'BUILD A COMMUNITY OF 10K BUILDERS',tag:'building',tc:'b'},
+  {t:'SHIP SOMETHING WITH 100K USERS',tag:'thinking',tc:'a'},
+  {t:'WRITE THE HANDBOOK I WISH EXISTED',tag:'soon',tc:'a'},
+  {t:'INVEST IN FOUNDERS I BELIEVE IN',tag:'eventually',tc:'a'},
+  {t:'REACH 1M PEOPLE WITH USEFUL IDEAS',tag:'building',tc:'b'},
+  {t:'MAKE SOMETHING THAT OUTLASTS ME',tag:'always',tc:'c'},
+];
+
+
+// cursor
+const cur=document.getElementById('cur'),ring=document.getElementById('cring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function a(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a)})();
+function hover(el){el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'))}
+
+// bg particles
+const cv=document.getElementById('bgc'),cx=cv.getContext('2d');
+let pm={x:innerWidth/2,y:innerHeight/2};
+function rsz(){cv.width=innerWidth;cv.height=innerHeight}rsz();
+window.addEventListener('resize',rsz);
+document.addEventListener('mousemove',e=>{pm.x=e.clientX;pm.y=e.clientY});
+class P{constructor(){this.rs()}rs(){this.x=Math.random()*innerWidth;this.y=Math.random()*innerHeight;this.vx=(Math.random()-.5)*.22;this.vy=(Math.random()-.5)*.22;this.r=Math.random()*1.1+.2;this.a=Math.random()*.28+.04;this.life=Math.random()*400+200;this.age=0}tick(){this.age++;if(this.age>this.life){this.rs();return}const dx=pm.x-this.x,dy=pm.y-this.y,d=Math.sqrt(dx*dx+dy*dy);if(d<100){this.vx-=dx/d*.025;this.vy-=dy/d*.025}this.vx*=.996;this.vy*=.996;this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>innerWidth)this.vx*=-1;if(this.y<0||this.y>innerHeight)this.vy*=-1}draw(){const f=Math.min(this.age/40,1)*Math.min((this.life-this.age)/40,1);cx.beginPath();cx.arc(this.x,this.y,this.r,0,Math.PI*2);cx.fillStyle=`rgba(255,255,255,${this.a*f})`;cx.fill()}}
+const pts=[];for(let i=0;i<60;i++)pts.push(new P());
+(function lp(){cx.clearRect(0,0,cv.width,cv.height);pts.forEach(p=>{p.tick();p.draw()});for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<70){cx.beginPath();cx.moveTo(pts[i].x,pts[i].y);cx.lineTo(pts[j].x,pts[j].y);cx.strokeStyle=`rgba(255,255,255,${.03*(1-d/70)})`;cx.lineWidth=.5;cx.stroke()}}requestAnimationFrame(lp)})();
+
+// name - two rows
+const nel1=document.getElementById('nel-lively'),nel2=document.getElementById('nel-sravan');
+'LIVELY'.split('').forEach(c=>{const s=document.createElement('span');s.className='ch ch1';s.textContent=c;nel1.appendChild(s)});
+'SRAVAN'.split('').forEach(c=>{const s=document.createElement('span');s.className='ch ch2';s.textContent=c;nel2.appendChild(s)});
+document.addEventListener('mousemove',e=>{
+  const nx=e.clientX/innerWidth-.5,ny=e.clientY/innerHeight-.5;
+  document.querySelectorAll('.ch1').forEach((c,i)=>{const off=(i-3)*.4;c.style.transform=`translateX(${nx*off*3}px) translateY(${ny*8}px)`});
+  document.querySelectorAll('.ch2').forEach((c,i)=>{const off=(i-3)*.4;c.style.transform=`translateX(${nx*off*3}px) translateY(${ny*8}px)`});
+});
+window.addEventListener('scroll',()=>{
+  const s=window.scrollY,l=document.getElementById('landing');
+  l.style.transform=`translateY(${s*.32}px)`;
+  l.style.opacity=Math.max(0,1-(s/window.innerHeight)*1.35);
+});
+
+// timeline
+const track=document.getElementById('ttrack');
+tl.forEach(e=>{
+  const el=document.createElement('div');el.className='titem';
+  el.innerHTML=`<div class="tnum">${e.n}</div><div class="tname">${e.t}</div><div class="tdesc">${e.d}</div><div class="tdot d${e.dot}"></div>`;
+  hover(el);track.appendChild(el);
+});
+let td=false,ts=0,tsl=0;
+track.addEventListener('mousedown',e=>{td=true;ts=e.pageX-track.offsetLeft;tsl=track.scrollLeft});
+document.addEventListener('mousemove',e=>{if(!td)return;track.scrollLeft=tsl-(e.pageX-track.offsetLeft-ts)});
+document.addEventListener('mouseup',()=>td=false);
+
+// lab
+const lg=document.getElementById('lgrid');
+projects.forEach(p=>{
+  const el=document.createElement('div');el.className='art';
+  el.innerHTML=`<div class="art-accent"></div><div class="anum">${p.n}</div><div class="atype">${p.type}</div><div class="atitle">${p.t}</div><div class="afoot"><span>${p.stats[0].v} ${p.stats[0].l}</span><span>&middot;</span><span>open &rarr;</span></div>`;
+  el.addEventListener('click',()=>openM(p));hover(el);lg.appendChild(el);
+});
+
+// modal
+function openM(p){
+  document.getElementById('mtype').textContent=p.type;
+  document.getElementById('mtitle').textContent=p.t;
+  document.getElementById('mstory').textContent=p.story;
+  document.getElementById('mlearn').textContent=p.learn;
+  document.getElementById('mimpact').textContent=p.impact;
+  document.getElementById('mstats').innerHTML=p.stats.map(s=>`<div class="sitem"><div class="sv">${s.v}</div><div class="sl">${s.l}</div></div>`).join('');
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow=''}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+// obsessions
+const og=document.getElementById('ogrid');
+obs.forEach(cat=>{
+  const b=document.createElement('div');b.className='oblock';
+  b.innerHTML=`<div class="ocat">${cat.cat}</div>${cat.items.map(i=>`<span class="oname">${i.n}</span><div class="osub">${i.s}</div>`).join('')}`;
+  og.appendChild(b);
+});
+
+// future
+const fl=document.getElementById('flist');
+fut.forEach((f,i)=>{
+  const el=document.createElement('div');el.className='frow';
+  el.innerHTML=`<div class="fi">0${i+1}</div><div class="fn">${f.t}</div><div class="ftag t${f.tc}">${f.tag}</div>`;
+  hover(el);fl.appendChild(el);
+});
+
+// reveal
+const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.06});
+document.querySelectorAll('.rev').forEach(el=>ro.observe(el));
+
+// egg
+const egg=document.getElementById('egg'),emsg=document.getElementById('emsg');
+let ec=0;
+egg.addEventListener('mouseenter',()=>emsg.style.opacity='1');
+egg.addEventListener('mouseleave',()=>emsg.style.opacity='0');
+egg.addEventListener('click',()=>{ec++;if(ec===3)emsg.innerHTML="three clicks.<br>most people stop at one.";if(ec===7)emsg.innerHTML="ok. you're just curious.<br>same reason i build things."});
+hover(egg);
+</script>
+</body>
+</html>
